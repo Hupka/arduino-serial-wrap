@@ -1,42 +1,52 @@
-#include <serialsend.h>
+#include <serialwrap.h>
 
 void setup() {
   // put your setup code here, to run once:
-  Serial.begin(9600);
+  SerialWrap::init(9600);
 }
 
-//#ifdef MEGA
-    void loop() {
-      // put your main code here, to run repeatedly:
-      //SerialSend::transferInt(100);
+void loop() {
+  // put your main code here, to run repeatedly:
 
-      Serial.println("ADRIAN");
-       package paket;
-        paket = SerialSend::receive();
-        if(paket.type == 'i') {
-          Serial.println(paket.i);
-        } else if(paket.type == 'f') {
-          Serial.println(paket.f);
-        } else if(paket.type == 's') {
-          Serial.println(paket.s);
-        }
-        delay(500);
-    }
-//#elif UNO
-//    void loop() {
-//      // put your main code here, to run repeatedly:
-//      SerialSend::transferInt(100);
-//
-//      delay(1000);
-//
-//      SerialSend::transferFloat(123.8912712);
-//
-//      delay(1000);
-//
-//      SerialSend::transferString("Hallo hier ihr!");
-//
-//      delay(1000);
-//    }
-//#endif
+  // Integer senden
+  SerialWrap::transferInt(30);
+
+  delay(500);
+
+  SerialWrap::transferInt(-31);
+
+  delay(500);
+
+  // Integer mit Kommastellen senden --> werden abgeschnitten
+  SerialWrap::transferInt(32.32);
+
+  delay(500);
+
+  SerialWrap::transferInt(-33.33);
+
+  delay(500);
+
+  // Float senden
+  SerialWrap::transferFloat(34.34);
+
+  delay(500);
+
+  SerialWrap::transferFloat(-35.35);
+
+  delay(500);
+
+  // String senden
+  SerialWrap::transferString("Wieso denn blos?!");
+
+  delay(500);
+
+  SerialWrap::transferString(String(-1232121));
+
+  delay(500);
+
+  SerialWrap::transferString(String(-0.3421, DEC));
+
+  delay(500);
+}
 
 
