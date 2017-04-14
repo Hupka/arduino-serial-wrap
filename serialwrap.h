@@ -2,7 +2,7 @@
 
 #include <Arduino.h>
 
-namespace SerialSend {
+namespace SerialWrap {
 
     struct package {
         char type = ' ';
@@ -12,6 +12,10 @@ namespace SerialSend {
     };
 
     float ten_shift = 10000.0;
+
+    void init (unsigned int baudrate) {
+        Serial.begin(baudrate);
+    }
 
     void transferFloat(float f) {
         
