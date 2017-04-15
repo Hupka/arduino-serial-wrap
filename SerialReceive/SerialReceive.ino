@@ -14,6 +14,8 @@ void loop() {
     Serial.println(pac.i);
   } else if(pac.type == 'f') {
     Serial.println(pac.f);
+  } else if(pac.type == 'l') {
+    Serial.println(pac.l);
   } else if(pac.type == 's') {
     Serial.println(pac.s);
   }

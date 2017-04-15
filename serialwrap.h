@@ -8,6 +8,7 @@ namespace SerialWrap {
         char type = ' ';
         float f = 0;
         int i = 0;
+        long l = 0;
         String s = "";
     };
 
@@ -19,7 +20,7 @@ namespace SerialWrap {
 
     void transferFloat(float f) {
         
-        int sendVal = f * ten_shift;
+        long sendVal = f * ten_shift;
 
         byte * b = (byte *) &sendVal;
         Serial.print("f:");
@@ -33,6 +34,16 @@ namespace SerialWrap {
     void transferInt(int i) {
         byte * b = (byte *) &i;
         Serial.print("i:");
+        Serial.write(b[0]);
+        Serial.write(b[1]);
+        Serial.write(b[2]);
+        Serial.write(b[3]);
+        delay(100);
+    }
+
+    void transferLong(long l) {
+        byte * b = (byte *) &l;
+        Serial.print("l:");
         Serial.write(b[0]);
         Serial.write(b[1]);
         Serial.write(b[2]);
@@ -68,8 +79,8 @@ namespace SerialWrap {
         delay(100);
     }
 
-    package receive() {
-        package ret_pack;
+    SerialWrap::package receive() {
+        SerialWrap::package ret_pack;
         
         if(Serial.available() > 0) {
             char inByte = Serial.read();
@@ -85,7 +96,7 @@ namespace SerialWrap {
                 indata[2] = Serial.read();
                 indata[3] = Serial.read();
 
-                int g;
+                long g;
                 memcpy(&g, &indata, sizeof(g));
                 ret_pack.f =  g / ten_shift;
             } else if(inByte == 'i') {
@@ -103,6 +114,21 @@ namespace SerialWrap {
                 int g;
                 memcpy(&g, &indata, sizeof(g));
                 ret_pack.i = g;
+            } else if(inByte == 'l') {
+                // we expect data with this format i:XXXX
+                ret_pack.type = 'l';
+                
+                Serial.read(); // discard ':'
+
+                byte indata[4] = { 0 };
+                indata[0] = Serial.read();
+                indata[1] = Serial.read();
+                indata[2] = Serial.read();
+                indata[3] = Serial.read();
+
+                long g;
+                memcpy(&g, &indata, sizeof(g));
+                ret_pack.l = g;
             } else if(inByte == 's') {
                 // we expect data with this format s:XXXX
                 ret_pack.type = 's';

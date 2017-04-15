@@ -11,42 +11,42 @@ void loop() {
   // Integer senden
   SerialWrap::transferInt(30);
 
-  delay(500);
+  delay(1000);
 
   SerialWrap::transferInt(-31);
 
-  delay(500);
+  delay(1000);
 
   // Integer mit Kommastellen senden --> werden abgeschnitten
-  SerialWrap::transferInt(32.32);
+  SerialWrap::transferLong(3232323232);
 
-  delay(500);
+  delay(1000);
 
-  SerialWrap::transferInt(-33.33);
+  SerialWrap::transferLong(-333333333);
 
-  delay(500);
+  delay(1000);
 
   // Float senden
   SerialWrap::transferFloat(34.34);
 
-  delay(500);
+  delay(1000);
 
   SerialWrap::transferFloat(-35.35);
 
-  delay(500);
+  delay(1000);
 
   // String senden
   SerialWrap::transferString("Wieso denn blos?!");
 
-  delay(500);
+  delay(1000);
 
   SerialWrap::transferString(String(-1232121));
 
-  delay(500);
+  delay(1000);
 
   SerialWrap::transferString(String(-0.3421, DEC));
 
-  delay(500);
+  delay(1000);
 }
 
 
