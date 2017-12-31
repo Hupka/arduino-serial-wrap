@@ -1,11 +1,9 @@
 #pragma once
 
-#include <Arduino.h>
+#include <arduino.h>
 
 namespace SerialWrap
 {
-    SerialWrap::board boardModel = SerialWrap::ARDUINO;
-
     struct package
     {
         char type = ' ';
@@ -15,15 +13,13 @@ namespace SerialWrap
         String s = "";
     };
 
-    enum board
-    {
-        ESPX;
-        ARDUINO;
-    }
+    enum board { SWRAP_ESPX, SWRAP_ARDUINO };
+ 
+    byte boardModel = SerialWrap::SWRAP_ARDUINO;
 
     float ten_shift = 10000.0;
 
-    void init(unsigned int baudrate, SerialWrap::board model = SerialWrap::ARDUINO)
+    void init(unsigned int baudrate, SerialWrap::board model = SerialWrap::SWRAP_ARDUINO)
     {
         Serial.begin(baudrate);
         boardModel = model;
@@ -56,7 +52,7 @@ namespace SerialWrap
         byte *b = (byte *)&i;
         switch (boardModel)
         {
-        case SerialWrap::ARDUINO:
+        case SerialWrap::SWRAP_ARDUINO:
             for (int i = 0; i < 2; i++)
             {
                 Serial.write(0);
@@ -67,7 +63,7 @@ namespace SerialWrap
             }
             delay(100);
             break;
-        case SerialWrap::ESPX:
+        case SerialWrap::SWRAP_ESPX:
             for (int i = 0; i < 4; i++)
             {
                 Serial.write(b[i]);
@@ -91,7 +87,7 @@ namespace SerialWrap
         byte *b = (byte *)&l;
         switch (boardModel)
         {
-        case SerialWrap::ARDUINO:
+        case SerialWrap::SWRAP_ARDUINO:
             for (int i = 0; i < 4; i++)
             {
                 Serial.write(0);
@@ -102,7 +98,7 @@ namespace SerialWrap
             }
             delay(100);
             break;
-        case SerialWrap::ESPX:
+        case SerialWrap::SWRAP_ESPX:
             for (int i = 0; i < 8; i++)
             {
                 Serial.write(b[i]);
@@ -159,7 +155,7 @@ namespace SerialWrap
 
         long receivedVal;
         memcpy(&receivedVal, &indata, sizeof(receivedVal));
-        return = receivedVal / ten_shift;
+        return receivedVal / ten_shift;
     }
 
     int receiveInt()
@@ -178,10 +174,10 @@ namespace SerialWrap
 
         switch (boardModel)
         {
-        case SerialWrap::ARDUINO:
+        case SerialWrap::SWRAP_ARDUINO:
             receivedVal = *((int *)(&indata[2]));
             break;
-        case SerialWrap::ESPX:
+        case SerialWrap::SWRAP_ESPX:
             receivedVal = *((int *)(&indata[0]));
             break;
         default:
@@ -191,7 +187,7 @@ namespace SerialWrap
 
         if (sign == 1)
         {
-            receivedVal = receivedVal * -1:
+            receivedVal = receivedVal * -1;
         }
 
         return receivedVal;
@@ -213,10 +209,10 @@ namespace SerialWrap
 
         switch (boardModel)
         {
-        case SerialWrap::ARDUINO:
+        case SerialWrap::SWRAP_ARDUINO:
             receivedVal = *((long *)(&indata[4]));
             break;
-        case SerialWrap::ESPX:
+        case SerialWrap::SWRAP_ESPX:
             receivedVal = *((long *)(&indata[0]));
             break;
         default:
@@ -226,7 +222,7 @@ namespace SerialWrap
 
         if (sign == 1)
         {
-            receivedVal = receivedVal * -1:
+            receivedVal = receivedVal * -1;
         }
 
         return receivedVal;
