@@ -4,6 +4,7 @@
 
 namespace SerialWrap
 {
+    SerialWrap::board boardModel = SerialWrap::ARDUINO;
 
     struct package
     {
@@ -22,9 +23,10 @@ namespace SerialWrap
 
     float ten_shift = 10000.0;
 
-    void init(unsigned int baudrate)
+    void init(unsigned int baudrate, SerialWrap::board model = SerialWrap::ARDUINO)
     {
         Serial.begin(baudrate);
+        boardModel = model;
     }
 
     void transferFloat(float f)
@@ -41,7 +43,7 @@ namespace SerialWrap
         delay(100);
     }
 
-    void transferInt(int i, SerialWrap::board boardModel = SerialWrap::ARDUINO)
+    void transferInt(int i)
     {
 
         Serial.print("i:");
@@ -77,7 +79,7 @@ namespace SerialWrap
         }
     }
 
-    void transferLong(long l, SerialWrap::board boardModel = SerialWrap::ARDUINO)
+    void transferLong(long l)
     {
         Serial.print("l:");
 
@@ -145,7 +147,7 @@ namespace SerialWrap
         delay(100);
     }
 
-    float receiveFloat(SerialWrap::board boardModel = SerialWrap::ARDUINO)
+    float receiveFloat()
     {
         Serial.read(); // discard ':'
 
@@ -160,7 +162,7 @@ namespace SerialWrap
         return = receivedVal / ten_shift;
     }
 
-    int receiveInt(SerialWrap::board boardModel = SerialWrap::ARDUINO)
+    int receiveInt()
     {
         Serial.read(); // discard ':'
 
@@ -195,7 +197,7 @@ namespace SerialWrap
         return receivedVal;
     }
 
-    long receiveLong(SerialWrap::board boardModel = SerialWrap::ARDUINO)
+    long receiveLong()
     {
         Serial.read(); // discard ':'
 
@@ -230,7 +232,7 @@ namespace SerialWrap
         return receivedVal;
     }
 
-    String receiveString(SerialWrap::board boardModel = SerialWrap::ARDUINO)
+    String receiveString()
     {
         Serial.read(); // discard ':'
 
@@ -247,7 +249,7 @@ namespace SerialWrap
         return str;
     }
 
-    SerialWrap::package receive(SerialWrap::board boardModel = SerialWrap::ARDUINO)
+    SerialWrap::package receive()
     {
         SerialWrap::package ret_pack;
 
@@ -258,25 +260,25 @@ namespace SerialWrap
             {
                 // we expect data with this format f:XXXX
                 ret_pack.type = 'f';
-                ret_pack.f = receiveFloat(boardModel);
+                ret_pack.f = receiveFloat();
             }
             else if (inByte == 'i')
             {
                 // we expect data with this format i:XXXX
                 ret_pack.type = 'i';
-                ret_pack.i = receiveInt(boardModel);
+                ret_pack.i = receiveInt();
             }
             else if (inByte == 'l')
             {
                 // we expect data with this format i:XXXX
                 ret_pack.type = 'l';
-                ret_pack.l = receiveLong(boardModel);
+                ret_pack.l = receiveLong();
             }
             else if (inByte == 's')
             {
                 // we expect data with this format s:XXXX
                 ret_pack.type = 's';
-                ret_pack.s = receiveString(boardModel);
+                ret_pack.s = receiveString();
             }
         }
 
